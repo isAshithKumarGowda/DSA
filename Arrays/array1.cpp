@@ -401,7 +401,6 @@ int Array::compare(Array *A,Array *B){
     }
 
 }
-
 int Array::Union(Array*A,Array*B){
     int s=A->length+B->length;
     int *C=new int [s];
