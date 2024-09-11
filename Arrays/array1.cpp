@@ -42,7 +42,10 @@ class Array{
         int *concatinate(Array*,Array*);
         int compare(Array*,Array*);
         void copy(Array*,Array*);
-        int Union(Array*,Array*);
+        int* Union(Array*,Array*);
+        int* sortedUnion(Array*,Array*);
+        int* Intersection(Array*,Array*);
+        int* Differece(Array*,Array*);
         ~Array();
 };
 
@@ -205,7 +208,7 @@ void Array::insert(int & index,int value){
 void Array::insertInSorted(int value){
     int i=length-1;
     if(length<size){
-        while(i>0&&Arr[i]>value){
+        while(i>=0&&Arr[i]>value){
             Arr[i+1]=Arr[i];
             i--;
         }
@@ -293,9 +296,9 @@ int Array::binarySearch(int key){
         if(key==Arr[mid])
             return mid;
         else if(key<Arr[mid])
-            h=key-1;
+            h=mid-1;
         else 
-            l=key+1;
+            l=mid+1;
     }
     cout<<"The number was not found"<<endl;
     return -1;
@@ -361,7 +364,13 @@ int *Array::Merge(Array* A,Array *B){
             C[k++]=B->Arr[j];
         for(;i<m;i++)
             C[k++]=A->Arr[i];
-    return C;
+
+    int* result = new int[m+n];
+    std::copy(C, C + (m+n), result);
+    delete[] C;
+
+    return result;
+    
 }
 
 int *Array::concatinate(Array *A,Array*B){
@@ -372,8 +381,12 @@ int *Array::concatinate(Array *A,Array*B){
         C[i]=A->Arr[i];
     for(int i=0;i<n;i++)
         C[i]=B->Arr[i];
-    return C;
-}
+
+    int* result = new int[m+n];
+    std::copy(C, C + (m+n), result);
+    delete[] C;
+
+    return result;}
 
 void Array::copy(Array *A,Array *B){
     int m=A->length;
@@ -401,7 +414,7 @@ int Array::compare(Array *A,Array *B){
     }
 
 }
-int Array::Union(Array*A,Array*B){
+int* Array::Union(Array*A,Array*B){
     int s=A->length+B->length;
     int *C=new int [s];
     int i;
@@ -411,6 +424,64 @@ int Array::Union(Array*A,Array*B){
         if(!find(A,B->Arr[k]))
             C[i++]=B->Arr[k];
     }
+
+    int* result = new int[s];
+    std::copy(C, C + s, result);
+    delete[] C;
+
+    return result;
+}
+
+int* Array::sortedUnion(Array *A,Array *B){
+    int *C=new int [A->length+B->length];
+    int i=0,j=0,k=0;
+    do{
+        if(A->Arr[i]<B->Arr[j])
+            C[k++]=A->Arr[i++];
+        else if(B->Arr[j]<A->Arr[i])
+            C[k++]=B->Arr[j++];
+    }while(i<A->length&&j<B->length);
+
+    while(i<A->length)
+        C[k++]=A->Arr[i++];
+    while(j<B->length)
+        C[k++]=B->Arr[j++];
+
+    int* result = new int[k];
+    std::copy(C, C + k, result);
+    delete[] C;
+
+    return result;
+}
+
+int* Array::Intersection(Array* A,Array* B ){
+    int *C=new int [A->length+B->length];
+    int k=0;
+    for(int i=0;i<A->length;i++){
+        if(find(A,B->Arr[i]))
+            C[k++]=B->Arr[i];
+    }
+
+    int* result = new int[k];
+    std::copy(C, C + k, result);
+    delete[] C;
+
+    return result;
+}
+
+int * Array::Differece(Array*A,Array*B){
+    int *C=new int [A->length+B->length];
+    int k=0;
+    for(int i=0;i<A->length;i++){
+        if(!find(B,A->Arr[i]))
+            C[k++]=A->Arr[i];
+    }
+
+    int* result = new int[k];
+    std::copy(C, C + k, result);
+    delete[] C;
+
+    return result;
 }
 
 Array::~Array(){
