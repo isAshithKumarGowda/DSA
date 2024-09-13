@@ -1,4 +1,5 @@
 #include<iostream>
+#include<utility>
 using namespace std;
 
 class Array{
@@ -46,6 +47,12 @@ class Array{
         int* sortedUnion(Array*,Array*);
         int* Intersection(Array*,Array*);
         int* Differece(Array*,Array*);
+        void missingEleSA();
+        void missingEleUA();
+        void duplicate();
+        void sumK(int key);
+        void sumKSA(int key);
+        std::pair<int,int> maxMin();
         ~Array();
 };
 
@@ -482,6 +489,119 @@ int * Array::Differece(Array*A,Array*B){
     delete[] C;
 
     return result;
+}
+
+void Array::missingEleSA(){
+    int diff=Arr[0];
+    for(int i=0;i<length;i++){
+        if(Arr[i]!=i+diff){
+            while(Arr[i]<i+diff){
+                cout<<i+diff<<endl;
+                diff++;
+            }
+        }
+    }
+}
+
+void Array::missingEleUA(){
+    int m=Max();
+    int H[m+1]={0};
+    int v;
+    for(int i=0;i<length;i++){
+        v=Arr[i];
+        H[v]++;
+    }
+    for(int i=0;i<=m;i++){
+        if(H[i]==0){
+            cout<<i<<endl;
+        }
+    }
+}
+
+void Array::duplicate(){
+    int m=Max();
+    int H[m+1]={0};
+    int v;
+    for(int i=0;i<length;i++){
+        v=Arr[i];
+        H[v]++;
+    }
+    for(int i=0;i<m;i++){
+        if(H[i]>1){
+            cout<<i<<" has multiple elements."<<endl;
+            cout<<i<<" has been repeated "<<H[i]<<" times"<<endl;
+        }
+    }
+}
+
+// void Array ::duplicate(){
+//     int lastDuplicate;
+//     for(int i=0;i<length;i++){
+//         if(Arr[i]==Arr[i+1]&&Arr[i]!=lastDuplicate){
+//             cout<<Arr[i]<<endl;
+//             lastDuplicate++;
+//         }
+//     }
+// }
+
+// void Array::duplicate(){
+//     int j;
+//     for(int i=0;i<length-1;i++){
+//         if(Arr[i]==Arr[i+1]){
+//             j=i+1;
+//             while(j<length&&Arr[j]==Arr[i])j++;
+//             cout<<Arr[i]<<" is appering "<<j-i<<" times"<<endl;
+//             i=j-1;
+//     }
+// }
+
+// void Array::sumK(int key){                      the function has time complexity of O(n^2);
+//     for(int i=0;i<length-1;i++){
+//         for(int j=i+1;j<length;j++){
+//             if(Arr[i]+Arr[j]==key){
+//                 cout<<Arr[i]<<'+'<<Arr[j]<<'='<<key<<endl;
+//             }
+//         }
+//     }
+// }
+
+void Array::sumK(int key){
+    int H[Max()]={0};
+    for(int i=0;i<length;i++){
+        int v=Arr[i];
+        int value=key-v;
+        if(H[value]==1&&value<=Max()&&value>=0){
+            cout<<v<<'+'<<value<<'='<<key<<endl;
+        }
+        H[v]=1;
+    }
+}
+
+void Array::sumKSA(int key){
+    for(int i=0,j=length-1;i!=j;){
+        int sum=Arr[i]+Arr[j];
+        if(sum==key){
+            cout<<Arr[i]<<'+'<<Arr[j]<<'='<<key;
+            i++;
+            j--;
+        }
+        else if(sum>key)
+            j--;
+        else 
+            i++;
+    }
+}
+
+std::pair<int,int> Array::maxMin(){
+    int max=Arr[0];
+    int min=Arr[0];
+    for(int i=1;i<length;i++){
+        if(max<Arr[i])
+            max=Arr[i];
+        if(min>Arr[i])
+            min=Arr[i];
+    }
+    return std::make_pair(max,min);
 }
 
 Array::~Array(){
